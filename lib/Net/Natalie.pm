@@ -48,16 +48,19 @@ sub get_latest_entry_serial {
     return $latest_serial;
 }
 
-sub fetch_by_feed {
+sub fetch_entry_title_by_feed {
     my ( $self ) = @_;
 
+    my @titles;
     foreach my $entry ( $self->feed->entries ) {
-        print $entry->title . "\n";
+        push( @titles, $entry->title );
     }
+    return @titles;
 }
 
-sub fetch_mannually {
+sub fetch_entry_title_manually {
     my ( $self ) = @_;
+    die "Please specify the 'get_num' by constructor." unless $self->get_num;
 
     my $latest_serial = $self->get_latest_entry_serial;
 
@@ -66,6 +69,7 @@ sub fetch_mannually {
         timeout => 10
     );
 
+    my @titles;
     my $iter  = 0;
     my $ratio = 0;
     while ($iter < $self->get_num) {
@@ -75,20 +79,12 @@ sub fetch_mannually {
         my $content = $self->content;
         if ($res->content =~ m#<meta property="og:url".*/$content/#) {
             $res->content =~ m#<title>(.*)</title>#;
-            print "$1.\n";
+            push( @titles, $1 );
             $iter++;
         }
         $ratio++;
     }
+    return @titles;
 }
 
-sub main {
-    my ( $self ) = @_;
-
-    if ( $self->get_num ) {
-        $self->fetch_mannually;
-    } else {
-        $self->fetch_by_feed;
-    }
-}
 1;

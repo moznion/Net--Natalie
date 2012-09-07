@@ -9,4 +9,6 @@ use lib ("$FindBin::Bin/../lib");
 use Net::Natalie;
 
 my $foo = Net::Natalie->new( content => 'comic', get_num => 2 );
-$foo->main;
+foreach ( $foo->fetch_entry_title_manually ) {
+    print "$_\n";
+}
