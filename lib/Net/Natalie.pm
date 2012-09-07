@@ -57,6 +57,11 @@ sub __parse_feed_by {
             $titles{$entry->link} = $entry->title;
         } elsif ( $type eq 'summary' ) {
             $titles{$entry->link} = $entry->summary->body;
+        } elsif ( $type eq 'info' ) {
+            my @info;
+            push( @info, $entry->title );
+            push( @info, $entry->summary->body );
+            $titles{$entry->link} = \@info;
         } else {
             die "Not supported type : $type";
         }
@@ -72,6 +77,11 @@ sub fetch_entry_title_by_feed {
 sub fetch_entry_summary_by_feed {
     my ( $this ) = @_;
     return $this->__parse_feed_by( 'summary' );
+}
+
+sub fetch_entry_info_by_feed {
+    my ( $this ) = @_;
+    return $this->__parse_feed_by( 'info' );
 }
 
 sub __parse_manually_by {
@@ -101,6 +111,13 @@ sub __parse_manually_by {
             } elsif ( $type eq 'summary' ) {
                 $res->content =~ m#<div id="news-text">.*\r?\n?.*<p>(.*)</p>#;
                 $titles{$uri} = $1;
+            } elsif ( $type eq 'info' ) {
+                my @info;
+                $res->content =~ m#<title>(.*)</title>#;
+                push( @info, $1 );
+                $res->content =~ m#<div id="news-text">.*\r?\n?.*<p>(.*)</p>#;
+                push( @info, $1 );
+                $titles{$uri} = \@info;
             } else {
                 die "Not supported type : $type";
             }
@@ -123,5 +140,12 @@ sub fetch_entry_summary_manually {
     die "Please specify the 'num_of_entry_to_get' by parameter." unless $num_of_entry_to_get;
 
     return $this->__parse_manually_by( 'summary', $num_of_entry_to_get );
+}
+
+sub fetch_entry_info_manually {
+    my ( $this, $num_of_entry_to_get ) = @_;
+    die "Please specify the 'num_of_entry_to_get' by parameter." unless $num_of_entry_to_get;
+
+    return $this->__parse_manually_by( 'info', $num_of_entry_to_get );
 }
 1;
