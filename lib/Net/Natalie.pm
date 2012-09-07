@@ -13,7 +13,7 @@ use Encode;
 use XML::Feed;
 use Furl;
 
-__PACKAGE__->mk_accessors( qw( content get_num base_uri feed ) );
+__PACKAGE__->mk_accessors( qw( content base_uri feed ) );
 
 sub new {
     my ($class, %opts) = @_;
@@ -51,16 +51,16 @@ sub get_latest_entry_serial {
 sub fetch_entry_title_by_feed {
     my ( $self ) = @_;
 
-    my @titles;
+    my %titles;
     foreach my $entry ( $self->feed->entries ) {
-        push( @titles, $entry->title );
+        $titles{$entry->link} = $entry->title;
     }
-    return @titles;
+    return %titles;
 }
 
 sub fetch_entry_title_manually {
-    my ( $self ) = @_;
-    die "Please specify the 'get_num' by constructor." unless $self->get_num;
+    my ( $self, $get_num ) = @_;
+    die "Please specify the 'get_num' by parameter." unless $get_num;
 
     my $latest_serial = $self->get_latest_entry_serial;
 
@@ -69,22 +69,23 @@ sub fetch_entry_title_manually {
         timeout => 10
     );
 
-    my @titles;
+    my %titles;
     my $iter  = 0;
     my $ratio = 0;
-    while ($iter < $self->get_num) {
+    while ($iter < $get_num) {
         my $serial_number = $latest_serial - $ratio;
         my $base_uri = $self->base_uri;
-        my $res = $furl->get("$base_uri/$serial_number");
+        my $uri = "$base_uri/$serial_number";
+        my $res = $furl->get($uri);
         my $content = $self->content;
         if ($res->content =~ m#<meta property="og:url".*/$content/#) {
             $res->content =~ m#<title>(.*)</title>#;
-            push( @titles, $1 );
+            $titles{$uri} = $1;
             $iter++;
         }
         $ratio++;
     }
-    return @titles;
+    return %titles;
 }
 
 1;
