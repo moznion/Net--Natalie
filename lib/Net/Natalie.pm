@@ -199,26 +199,32 @@ Available content type are following:
   - owarai
 
 =head2 fetch_entry_title_manually( $num_of_get_entry )
+
 This method get titles of entries by http query up to $num_of_get_entry from recent entry.
 It returns a hash. (URL => title)
 
 =head2 fetch_entry_summary_manually( $num_of_get_entry )
+
 This method get summaries of entries by http query up to $num_of_get_entry from recent entry.
 It returns a hash. (URL => summary)
 
 =head2 fetch_entry_info_manually( $num_of_get_entry )
+
 This method get titles and summaries of entries by http query up to $num_of_get_entry from recent entry.
 It returns a hash. (URL => (title, summary))
 
 =head2 fetch_entry_title_by_feed
+
 This method get titles of entries by rss feed. (Maybe up to 50 entries)
 It returns a hash. (URL => title)
 
 =head2 fetch_entry_summary_by_feed
+
 This method get summaries of entries by rss feed.
 It returns a hash. (URL => summary)
 
 =head2 fetch_entry_info_by_feed
+
 This method get titles and summaries of entries by rss feed.
 It returns a hash. (URL => (title, summary))
 
