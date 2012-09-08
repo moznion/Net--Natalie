@@ -1,0 +1,30 @@
+This is Perl module Net::Natalie
+
+INSTALLATION
+
+Net::Natalie installation is starightforward. If your CPAN shell is set up,
+you should just be able to do
+
+    % cpan Net::Natalie
+
+Download it, unpack it, then build it as per the usual:
+
+    % perl Makefile.PL
+    % make && make test
+
+then install it:
+
+    % make install
+
+Net::Natalie documentation is available as in POD. So you can do:
+
+    % perldoc Net::Natalie
+
+to read the documentation online with your favolite pager.
+
+LISENCE
+
+    This library is free software; you can redistribute it and/or modify
+    it under the same terms as Perl itself.
+
+moznion
