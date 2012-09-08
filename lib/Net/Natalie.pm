@@ -91,7 +91,7 @@ sub __parse_manually_by {
     my $latest_serial = $this->__get_latest_entry_serial;
 
     my $furl = Furl->new(
-        agent => 'foo', #FIXME set correctly agent name
+        agent => 'Net-Natalie',
         timeout => 10
     );
 
