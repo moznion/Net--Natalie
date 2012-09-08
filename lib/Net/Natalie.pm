@@ -34,7 +34,7 @@ sub new {
     return $this;
 };
 
-sub get_latest_entry_serial {
+sub __get_latest_entry_serial {
     my ( $this ) = @_;
 
     my $latest_serial = 0;
@@ -88,7 +88,7 @@ sub __parse_manually_by {
     my ( $this, $type, $num_of_entry_to_get ) = @_;
     die "Please specify the 'num_of_entry_to_get' by parameter." unless $num_of_entry_to_get;
 
-    my $latest_serial = $this->get_latest_entry_serial;
+    my $latest_serial = $this->__get_latest_entry_serial;
 
     my $furl = Furl->new(
         agent => 'foo', #FIXME set correctly agent name
